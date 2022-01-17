@@ -1,11 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import {
-    View,
-    Text,
-    Image,
-    Animated,
-    TouchableOpacity,
-} from 'react-native';
+import { View, Text, Image, Animated, TouchableOpacity } from "react-native";
 import { Shadow } from "react-native-shadow-2";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -156,6 +150,7 @@ const MainLayout = () => {
                   style={{
                     height: SIZES.height,
                     width: SIZES.width,
+                    paddingBottom: 90
                   }}
                 >
                   {item.label == constants.screens.home && <Home />}
