@@ -347,11 +347,60 @@ const notificationByDays = [
     },
 ]
 
+
+const profile_details1 = [
+  {
+    id: 0,
+    subtitle: "Name",
+    title: "Aswin Raj",
+    icon: require("../assets/icons/profile.png"),
+  },
+  {
+    id: 1,
+    subtitle: "Email",
+    title: "aswinraj@gmail.com",
+    icon: require("../assets/icons/email.png"),
+  },
+  {
+    id: 2,
+    subtitle: "Password",
+    title: "Updated 2 weeks ago",
+    icon: require("../assets/icons/password.png"),
+  },
+  {
+    id: 3,
+    subtitle: "Contact Number",
+    title: "+91 6514648963",
+    icon: require("../assets/icons/call.png"),
+  },
+];
+
+const profile_details2 = [
+  {
+    id: 0,
+    title: "Pages",
+    icon: require("../assets/icons/star_1.png"),
+  },
+  {
+    id: 1,
+    title: "New Course Notifications",
+    icon: require("../assets/icons/new.png"),
+  },
+  {
+    id: 2,
+    title: "Study Remainder",
+    icon: require("../assets/icons/time.png"),
+  },
+];
+
+
 export default {
-    categories,
-    courses_list_1,
-    courses_list_2,
-    top_searches,
-    course_details,
-    notificationByDays,
-}
+  categories,
+  courses_list_1,
+  courses_list_2,
+  top_searches,
+  course_details,
+  notificationByDays,
+  profile_details1,
+  profile_details2,
+};

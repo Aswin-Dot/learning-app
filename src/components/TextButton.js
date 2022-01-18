@@ -27,7 +27,7 @@ const TextButton = ({
           icon ? (
             <Image
               source={icon}
-              style={{ height: 20, width: 20, marginRight: SIZES.base, ...tintColor }}
+              style={{ height: 15, width: 15, marginRight: SIZES.base, tintColor: tintColor }}
             />
           ) : null
         }

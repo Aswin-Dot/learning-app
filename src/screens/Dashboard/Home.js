@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -174,8 +174,8 @@ const Home = () => {
             <VerticalCourseCart
               course={item}
               containerStyle={{
-                marginLeft: index == 0 ? SIZES.radius : 0,
                 padding: SIZES.base,
+                marginLeft: index == 0 ? SIZES.radius : 0,
                 marginRight:
                   index == dummyData.courses_list_1.length - 1
                     ? SIZES.radius
@@ -187,7 +187,7 @@ const Home = () => {
 
         <Divider style={{ marginVertical: SIZES.base }} />
 
-        {/* Categories */}
+        {/* ---------------- Categories ----------- */}
         <Section title="Categories">
           <FlatList
             horizontal
@@ -202,6 +202,8 @@ const Home = () => {
               <CategoriesCard
                 category={item}
                 containerStyle={{
+                  width: 150,
+                  height: 120,
                   marginLeft: index == 0 ? SIZES.padding : SIZES.base,
                   marginRight:
                     index == dummyData.categories.length - 1
@@ -217,25 +219,23 @@ const Home = () => {
         <Section title="Popular Courses">
           <FlatList
             data={dummyData.courses_list_2}
-            listKey="Popular Courses"
-            keyExtractor={(item) => `Popular Courses-${item.id}`}
+            listKey="PopularCourses"
+            keyExtractor={(item) => `PopularCourses-${item.id}`}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               marginTop: SIZES.base,
               paddingHorizontal: SIZES.padding,
             }}
             renderItem={({ item, index }) => (
-              <View>
-                <HorizontalCourseCard
-                  course={item}
-                  containerStyle={{
-                    marginBottom: SIZES.radius,
-                  }}
-                />
-                {index < dummyData.courses_list_2.length-1 ? (
-                  <Divider style={{ marginVertical: SIZES.base }} />
-                ) : null}
-              </View>
+              <HorizontalCourseCard
+                course={item}
+                containerStyle={{
+                  marginBottom: SIZES.radius,
+                }}
+              />
+            )}
+            ItemSeparatorComponent={() => (
+              <Divider style={{ marginVertical: SIZES.base }} />
             )}
           />
         </Section>

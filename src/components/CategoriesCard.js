@@ -13,8 +13,6 @@ const CategoriesCard = ({ containerStyle, category }) => {
       <ImageBackground
         source={category?.thumbnail}
         style={{
-          width: 150,
-          height: 120,
           borderRadius: SIZES.radius,
           paddingVertical: SIZES.radius,
           paddingHorizontal: SIZES.radius,
