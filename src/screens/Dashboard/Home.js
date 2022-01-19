@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Divider } from "react-native-elements";
+import { connect } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   TextButton,
@@ -20,41 +22,46 @@ import { FlatList } from "react-native-gesture-handler";
 
 import { COLORS, SIZES, icons, FONTS, images, dummyData } from "../../../constants";
 
-const Section = ({ children, containerStyle, title }) => {
-  return (
-    <View
-      style={{
-        marginVertical: SIZES.radius,
-        ...containerStyle,
-      }}
-    >
+const Home = ({ appTheme }) => {
+
+  const navigation = useNavigation();
+
+  // Render section
+  const Section = ({ children, containerStyle, title }) => {
+    return (
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          paddingHorizontal: SIZES.padding,
-          paddingBottom: SIZES.radius
+          marginVertical: SIZES.radius,
+          ...containerStyle,
         }}
       >
-        <Text style={{ ...FONTS.h2 }}>{title}</Text>
-        <TouchableOpacity
+        <View
           style={{
-            paddingHorizontal: SIZES.radius,
-            paddingVertical: 5,
-            backgroundColor: COLORS.primary,
-            borderRadius: 30,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            paddingHorizontal: SIZES.padding,
+            paddingBottom: SIZES.radius,
           }}
         >
-          <Text style={{ ...FONTS.body4, color: COLORS.white }}>see all</Text>
-        </TouchableOpacity>
+          <Text style={{ ...FONTS.h2, color: appTheme?.textColor }}>
+            {title}
+          </Text>
+          <TouchableOpacity
+            style={{
+              paddingHorizontal: SIZES.radius,
+              paddingVertical: 5,
+              backgroundColor: COLORS.primary,
+              borderRadius: 30,
+            }}
+          >
+            <Text style={{ ...FONTS.body4, color: appTheme?.textColor4}}>see all</Text>
+          </TouchableOpacity>
+        </View>
+        {children}
       </View>
-      {children}
-    </View>
-  );
-};
-
-const Home = () => {
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -70,16 +77,18 @@ const Home = () => {
         }}
       >
         <View>
-          <Text style={{ ...FONTS.h2 }}>Hello, Aswin!</Text>
+          <Text style={{ ...FONTS.h2, color: appTheme?.textColor }}>
+            Hello, Aswin!
+          </Text>
           <Text style={{ ...FONTS.body4, color: COLORS.gray40 }}>
             Monday, 17th Jan 2022
           </Text>
         </View>
 
-        <TouchableOpacity onPress={() => console("Bell icon")}>
+        <TouchableOpacity onPress={() => console.log("Bell icon")}>
           <Image
             source={icons.notification}
-            style={{ height: 25, width: 25 }}
+            style={{ height: 25, width: 25, tintColor: appTheme?.tintColor }}
             resizeMode="contain"
           />
         </TouchableOpacity>
@@ -172,6 +181,7 @@ const Home = () => {
           }}
           renderItem={({ item, index }) => (
             <VerticalCourseCart
+              appTheme={appTheme}
               course={item}
               containerStyle={{
                 padding: SIZES.base,
@@ -201,6 +211,10 @@ const Home = () => {
             renderItem={({ item, index }) => (
               <CategoriesCard
                 category={item}
+                onPress={() =>
+                  navigation.navigate("CourseListing", { category: item, sharedElementPrefix: "Home" })
+                }
+                sharedElementPrefix="Home"
                 containerStyle={{
                   width: 150,
                   height: 120,
@@ -228,6 +242,7 @@ const Home = () => {
             }}
             renderItem={({ item, index }) => (
               <HorizontalCourseCard
+                appTheme={appTheme}
                 course={item}
                 containerStyle={{
                   marginBottom: SIZES.radius,
@@ -244,4 +259,10 @@ const Home = () => {
   );
 };
 
-export default Home;
+const mapStateToProps = (state) => {
+  const { appTheme } = state.theme;
+
+  return { appTheme };
+};
+
+export default connect(mapStateToProps)(Home);

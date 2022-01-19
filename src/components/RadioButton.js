@@ -1,9 +1,10 @@
 import React from "react";
 import { TouchableOpacity, Animated } from "react-native";
+import { connect } from "react-redux";
 
 import { COLORS } from "../../constants";
 
-const RadioButton = ({ isSelected, onPress }) => {
+const RadioButton = ({ appTheme, isSelected, onPress }) => {
 
     const radioAnimated = React.useRef(new Animated.Value(0)).current;
 
@@ -48,7 +49,7 @@ const RadioButton = ({ isSelected, onPress }) => {
             width: "100%",
             height: 5,
             borderRadius: 3,
-            backgroundColor: lineColorAnimated
+            backgroundColor: lineColorAnimated,
           }}
         />
 
@@ -61,11 +62,17 @@ const RadioButton = ({ isSelected, onPress }) => {
             borderRadius: 15,
             borderWidth: 4,
             borderColor: circleColorAnimated,
-            backgroundColor: COLORS.white,
+            backgroundColor: appTheme?.backgroundColor1,
           }}
         />
       </TouchableOpacity>
     );
 }
 
-export default RadioButton;
+const mapStateToProps = (state) => {
+  const { appTheme } = state.theme;
+
+  return { appTheme };
+};
+
+export default connect(mapStateToProps)(RadioButton);

@@ -1,16 +1,26 @@
-import { SET_SELECTED_TAB } from "./type";
+import {
+  TOGGLE_THEME_BEGIN,
+  TOGGLE_THEME_FAILURE,
+  TOGGLE_THEME_SUCCESS,
+} from "./type";
+import { selectedTheme } from "../../../constants";
 
 const initialState = {
-  selectedTab: "",
+  appTheme: selectedTheme,
+  error: "",
 };
 
-const tabReducer = (state = initialState, action) => {
+const themeReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_SELECTED_TAB:
-      return { ...state, selectedTab: action.payload };
+    case TOGGLE_THEME_BEGIN:
+      return { ...state, error: "" };
+    case TOGGLE_THEME_SUCCESS:
+      return { ...state, appTheme: action.payload };
+    case TOGGLE_THEME_FAILURE:
+      return { ...state, error: action.payload };
     default:
       return state;
   }
 };
 
-export default tabReducer;
+export default themeReducer;

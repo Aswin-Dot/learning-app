@@ -2,13 +2,11 @@ import React, { useState, useRef } from "react";
 import {
   View,
   Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native-gesture-handler";
 import { Shadow } from "react-native-shadow-2";
+import { connect } from "react-redux";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -16,6 +14,7 @@ import Animated, {
   interpolate,
   Extrapolate,
 } from "react-native-reanimated";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   TextButton,
@@ -24,8 +23,9 @@ import {
 } from "../../components";
 import { COLORS, SIZES, FONTS, dummyData } from "../../../constants";
 
+const Search = ({ appTheme }) => {
+  const navigation = useNavigation();
 
-const Search = () => {
   const scrollViewRef = useRef();
   const scrollY = useSharedValue(0);
   const onScroll = useAnimatedScrollHandler((event) => {
@@ -56,7 +56,7 @@ const Search = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, backgroundColor: COLORS.white }}>
+      <View style={{ flex: 1 }}>
         <Animated.ScrollView
           ref={scrollViewRef}
           contentContainerStyle={{
@@ -82,7 +82,13 @@ const Search = () => {
         >
           {/* Top Searches */}
           <View style={{ marginTop: SIZES.padding }}>
-            <Text style={{ marginHorizontal: SIZES.padding, ...FONTS.h2 }}>
+            <Text
+              style={{
+                marginHorizontal: SIZES.padding,
+                ...FONTS.h2,
+                color: appTheme?.textColor,
+              }}
+            >
               Top Searches
             </Text>
             <FlatList
@@ -123,7 +129,13 @@ const Search = () => {
 
           {/* Browse Category */}
           <View style={{ marginTop: SIZES.padding }}>
-            <Text style={{ marginHorizontal: SIZES.padding, ...FONTS.h2 }}>
+            <Text
+              style={{
+                marginHorizontal: SIZES.padding,
+                ...FONTS.h2,
+                color: appTheme?.textColor,
+              }}
+            >
               Browse Category
             </Text>
 
@@ -139,11 +151,18 @@ const Search = () => {
               renderItem={({ item, index }) => (
                 <CategoriesCard
                   category={item}
+                  onPress={() =>
+                    navigation.navigate("CourseListing", {
+                      category: item,
+                      sharedElementPrefix: "Search",
+                    })
+                  }
+                  sharedElementPrefix="Search"
                   containerStyle={{
                     height: 130,
                     paddingBottom: SIZES.radius * 1.5,
                     width: (SIZES.width - SIZES.padding * 2 - SIZES.radius) / 2,
-                    marginTop: -4,
+                    marginTop: SIZES.radius,
                     marginLeft:
                       (index + 1) % 2 == 0 ? SIZES.radius : SIZES.padding,
                   }}
@@ -175,4 +194,10 @@ const Search = () => {
   );
 };
 
-export default Search;
+const mapStateToProps = (state) => {
+  const { appTheme } = state.theme;
+
+  return { appTheme };
+};
+
+export default connect(mapStateToProps)(Search);

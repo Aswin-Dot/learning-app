@@ -4,7 +4,7 @@ import { View, Text, Image, TouchableOpacity } from "react-native";
 import IconLabel from "./IconLabel"
 import { COLORS, FONTS, SIZES, icons } from "../../constants";
 
-const VerticalCourseCart = ({ containerStyle, course }) => {
+const VerticalCourseCart = ({ appTheme, containerStyle, course }) => {
     return (
       <TouchableOpacity
         style={{ width: 270, ...containerStyle }}
@@ -54,12 +54,14 @@ const VerticalCourseCart = ({ containerStyle, course }) => {
 
           {/* info */}
           <View style={{ marginLeft: SIZES.radius, flexShrink: 1 }}>
-            <Text style={{ ...FONTS.h3 }}>{course.title}</Text>
+            <Text style={{ ...FONTS.h3, color: appTheme?.textColor }}>
+              {course.title}
+            </Text>
             <IconLabel
               icon={icons.time}
-              iconStyle={{ height: 15, width: 15, tintColor: COLORS.gray60 }}
+              iconStyle={{ height: 15, width: 15, tintColor: appTheme?.textColor7 }}
               label={course.duration}
-              labelStyle={{ ...FONTS.body4, color: COLORS.gray60 }}
+              labelStyle={{ ...FONTS.body4, color: appTheme?.textColor7 }}
             />
           </View>
         </View>

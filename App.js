@@ -2,6 +2,7 @@ import React from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
 
 import {
   useFonts,
@@ -10,10 +11,9 @@ import {
   Roboto_900Black,
 } from "@expo-google-fonts/roboto";
 
+import { store } from "./src/redux";
 
-import MainLayout from "./src/screens/MainLayout";
-
-const Stack = createNativeStackNavigator();
+import AppNavigation from "./src/navigation/AppNavigation";
 
 const App = () => {
   let [fontsLoaded] = useFonts({
@@ -27,16 +27,11 @@ const App = () => {
   } else {
     return (
       <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator
-            screenOptions={{
-              headerShown: false,
-            }}
-            initialRouteName={"Dashboard"}
-          >
-            <Stack.Screen name="Dashboard" component={MainLayout} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <Provider store={store}>
+          <NavigationContainer>
+            <AppNavigation/>
+          </NavigationContainer>
+        </Provider>
       </SafeAreaProvider>
     );
   }

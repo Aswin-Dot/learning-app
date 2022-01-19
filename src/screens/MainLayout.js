@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { View, Text, Image, Animated, TouchableOpacity } from "react-native";
 import { Shadow } from "react-native-shadow-2";
+import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { FONTS, COLORS, constants, SIZES } from '../../constants';
@@ -101,93 +102,99 @@ const Tabs = ({ scrollX, onBottomTabPress }) => {
   );
 };
 
-const MainLayout = () => {
-    const flatListRef = useRef();
-    const scrollX = useRef(new Animated.Value(0)).current;
+const MainLayout = ({ appTheme }) => {
+  const flatListRef = useRef();
+  const scrollX = useRef(new Animated.Value(0)).current;
 
-    const onBottomTabPress = useCallback((bottomTabIndex) => {
-        flatListRef?.current?.scrollToOffset({
-            offset: bottomTabIndex * SIZES.width,
-        })
-    }, []);
+  const onBottomTabPress = useCallback((bottomTabIndex) => {
+    flatListRef?.current?.scrollToOffset({
+      offset: bottomTabIndex * SIZES.width,
+    });
+  }, []);
 
-    return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: COLORS.white,
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: appTheme?.backgroundColor1,
+      }}
+    >
+      {/* Content */}
+      <KeyboardAwareScrollView
+        keyboardDismissMode="on-drag"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 0,
+          flexGrow: 1,
         }}
       >
-        {/* Content */}
-        <KeyboardAwareScrollView
-          keyboardDismissMode="on-drag"
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 0,
-            flexGrow: 1,
-          }}
-        >
-          <Animated.FlatList
-            ref={flatListRef}
-            horizontal
-            scrollEnabled={false}
-            pagingEnabled
-            snapToAlignment="center"
-            snapToInterval={SIZES.width}
-            decelerationRate="fast"
-            showsHorizontalScrollIndicator={false}
-            data={constants.bottom_tabs}
-            keyExtractor={(item) => `Main-${item.id}`}
-            onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-              {
-                useNativeDriver: false,
-              }
-            )}
-            renderItem={({ item, index }) => {
-              return (
-                <View
-                  style={{
-                    height: SIZES.height,
-                    width: SIZES.width,
-                    paddingBottom: 90
-                  }}
-                >
-                  {item.label == constants.screens.home && <Home />}
-                  {item.label == constants.screens.search && <Search />}
-                  {item.label == constants.screens.profile && <Profile />}
-                </View>
-              );
-            }}
-          />
-
-          {/* bottom tab */}
-          <View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              marginBottom: 20,
-              paddingHorizontal: SIZES.padding,
-              paddingVertical: SIZES.radius,
-            }}
-          >
-            <Shadow size={[SIZES.width - SIZES.padding * 2, 85]}>
+        <Animated.FlatList
+          ref={flatListRef}
+          horizontal
+          scrollEnabled={false}
+          pagingEnabled
+          snapToAlignment="center"
+          snapToInterval={SIZES.width}
+          decelerationRate="fast"
+          showsHorizontalScrollIndicator={false}
+          data={constants.bottom_tabs}
+          keyExtractor={(item) => `Main-${item.id}`}
+          onScroll={Animated.event(
+            [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            {
+              useNativeDriver: false,
+            }
+          )}
+          renderItem={({ item, index }) => {
+            return (
               <View
                 style={{
-                  flex: 1,
-                  borderRadius: SIZES.radius,
-                  backgroundColor: COLORS.primary3,
+                  height: SIZES.height,
+                  width: SIZES.width,
+                  paddingBottom: 90,
                 }}
               >
-                <Tabs scrollX={scrollX} onBottomTabPress={onBottomTabPress} />
+                {item.label == constants.screens.home && <Home />}
+                {item.label == constants.screens.search && <Search />}
+                {item.label == constants.screens.profile && <Profile />}
               </View>
-            </Shadow>
-          </View>
-        </KeyboardAwareScrollView>
-      </View>
-    );
-}
+            );
+          }}
+        />
 
-export default MainLayout;
+        {/* bottom tab */}
+        <View
+          style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            marginBottom: 20,
+            paddingHorizontal: SIZES.padding,
+            paddingVertical: SIZES.radius,
+          }}
+        >
+          <Shadow size={[SIZES.width - SIZES.padding * 2, 85]}>
+            <View
+              style={{
+                flex: 1,
+                borderRadius: SIZES.radius,
+                backgroundColor: appTheme?.backgroundColor2,
+              }}
+            >
+              <Tabs scrollX={scrollX} onBottomTabPress={onBottomTabPress} />
+            </View>
+          </Shadow>
+        </View>
+      </KeyboardAwareScrollView>
+    </View>
+  );
+};
+
+const mapStateToProps = (state) => {
+  const { appTheme } = state.theme;
+
+  return { appTheme };
+};
+
+export default connect(mapStateToProps)(MainLayout);

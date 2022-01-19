@@ -12,12 +12,16 @@ import {
   LinearProgress,
   ListItem,
 } from "react-native-elements";
+import { FlatList } from "react-native-gesture-handler";
 import { Entypo } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
-import { TextButton, RadioButton } from "../../components";
-import { FlatList } from "react-native-gesture-handler";
+// redux
+import { connect } from "react-redux";
+import { toggleTheme } from "../../redux/Theme/actions";
 
+import { TextButton, RadioButton } from "../../components";
 import {
   COLORS,
   SIZES,
@@ -27,47 +31,7 @@ import {
   dummyData,
 } from "../../../constants";
 
-const RenderProfile = ({ item, radioButton = false, value, setValue }) => (
-  <TouchableOpacity onPress={() => console.log(item.title)}>
-    <ListItem>
-      <View
-        style={{
-          padding: SIZES.radius,
-          borderRadius: 30,
-          backgroundColor: "rgba(66, 198, 165, .3)",
-        }}
-      >
-        {/* Image */}
-        <Image
-          source={item.icon}
-          style={{
-            height: 25,
-            width: 25,
-            tintColor: COLORS.primary,
-            opacity: 1,
-          }}
-          resizeMode="contain"
-        />
-      </View>
-
-      {/* Content */}
-      <ListItem.Content>
-        {item?.subtitle && (
-          <ListItem.Subtitle style={{ ...FONTS.body4, color: COLORS.gray40 }}>
-            {item.subtitle}
-          </ListItem.Subtitle>
-        )}
-        <ListItem.Title style={{ ...FONTS.h3 }}>{item.title}</ListItem.Title>
-      </ListItem.Content>
-
-      {/* Icon */}
-      {radioButton ? <RadioButton isSelected={value} onPress={() => setValue(!value)} /> : <Entypo name="chevron-small-right" size={24} color={COLORS.gray40} /> }
-    </ListItem>
-  </TouchableOpacity>
-);
-
-
-const Profile = () => {
+const Profile = ({ appTheme, toggleTheme }) => {
     const [radio1, setRadio1] = useState(false)
     const [radio2, setRadio2] = useState(false)
 
@@ -92,8 +56,69 @@ const Profile = () => {
       setSelectedImage({ localUri: pickerResult.uri });
     };
 
+    // Theme handler
+    const toggleThemeHandler = () => {
+      if (appTheme?.name == "dark") {
+        toggleTheme("light")
+      } else {
+        toggleTheme("dark")
+      }
+    }
+
+    // Render component
+    const RenderProfile = ({ item, radioButton = false, value, setValue }) => (
+      <TouchableOpacity onPress={() => console.log(item.title)}>
+        <ListItem containerStyle={{ backgroundColor: appTheme?.backgroundColor1 }}>
+          <View
+            style={{
+              padding: SIZES.radius,
+              borderRadius: 30,
+              backgroundColor: appTheme?.backgroundColor3,
+            }}
+          >
+            {/* Image */}
+            <Image
+              source={item.icon}
+              style={{
+                height: 25,
+                width: 25,
+                tintColor: COLORS.primary,
+                opacity: 1,
+              }}
+              resizeMode="contain"
+            />
+          </View>
+
+          {/* Content */}
+          <ListItem.Content>
+            {item?.subtitle && (
+              <ListItem.Subtitle
+                style={{ ...FONTS.body4, color: COLORS.gray40 }}
+              >
+                {item.subtitle}
+              </ListItem.Subtitle>
+            )}
+            <ListItem.Title style={{ ...FONTS.h3, color: appTheme?.textColor }}>
+              {item.title}
+            </ListItem.Title>
+          </ListItem.Content>
+
+          {/* Icon */}
+          {radioButton ? (
+            <RadioButton isSelected={value} onPress={() => setValue(!value)} />
+          ) : (
+            <Entypo
+              name="chevron-small-right"
+              size={24}
+              color={appTheme?.tintColor}
+            />
+          )}
+        </ListItem>
+      </TouchableOpacity>
+    );
+
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: appTheme?.backgroundColor1 }}>
         {/* Header */}
         <View
           style={{
@@ -105,19 +130,34 @@ const Profile = () => {
             justifyContent: "space-between",
           }}
         >
-          <Text style={{ ...FONTS.h2 }}>Profile</Text>
+          <Text style={{ ...FONTS.h2, color: appTheme?.textColor }}>
+            Profile
+          </Text>
 
-          <TouchableOpacity onPress={() => console.log("Bell icon")}>
-            <Image
-              source={icons.sun}
-              style={{ height: 25, width: 25 }}
-              resizeMode="contain"
-            />
+          <TouchableOpacity onPress={() => toggleThemeHandler()}>
+            {appTheme?.name == "light" ? (
+              <MaterialIcons
+                name="brightness-4"
+                size={28}
+                color={appTheme?.tintColor}
+              />
+            ) : (
+              <Image
+                source={icons.sun}
+                style={{
+                  height: 25,
+                  width: 25,
+                  tintColor: appTheme?.tintColor,
+                }}
+                resizeMode="contain"
+              />
+            )}
           </TouchableOpacity>
         </View>
 
         {/* Contents */}
         <ScrollView
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{
             paddingHorizontal: SIZES.padding,
             paddingBottom: SIZES.padding,
@@ -131,7 +171,7 @@ const Profile = () => {
               paddingHorizontal: SIZES.radius,
               paddingVertical: 20,
               borderRadius: SIZES.radius,
-              backgroundColor: COLORS.primary3,
+              backgroundColor: appTheme?.backgroundColor2,
               alignItems: "center",
             }}
           >
@@ -236,10 +276,10 @@ const Profile = () => {
               {/* Button */}
               <TextButton
                 title="+ Become Member"
-                titleStyle={{ color: COLORS.primary, ...FONTS.h4 }}
+                titleStyle={{ color: appTheme?.textColor2, ...FONTS.h4 }}
                 buttonStyle={{
                   borderRadius: 30,
-                  backgroundColor: COLORS.white,
+                  backgroundColor: appTheme?.backgroundColor4,
                   paddingHorizontal: SIZES.radius,
                 }}
                 containerStyle={{
@@ -310,4 +350,16 @@ const Profile = () => {
     );
 }
 
-export default Profile;
+const mapStateToProps = (state) => {
+  const { appTheme, error } = state.theme;
+
+  return { appTheme, error };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    toggleTheme: (themeType) => dispatch(toggleTheme(themeType)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

@@ -1,36 +1,66 @@
 import React from "react";
 import {
+  View,
   Text,
   TouchableOpacity,
-  ImageBackground,
+  StyleSheet,
+  Image
 } from "react-native";
+import { SharedElement } from "react-navigation-shared-element";
 
 import { COLORS, FONTS, SIZES } from "../../constants";
 
-const CategoriesCard = ({ containerStyle, category }) => {
+const CategoriesCard = ({ sharedElementPrefix, containerStyle, category, onPress }) => {
   return (
-    <TouchableOpacity onPress={() => console.log("hi")}>
-      <ImageBackground
-        source={category?.thumbnail}
-        style={{
-          borderRadius: SIZES.radius,
-          paddingVertical: SIZES.radius,
-          paddingHorizontal: SIZES.radius,
-          justifyContent: "flex-end",
-          ...containerStyle,
-        }}
-        resizeMode="contain"
+    <TouchableOpacity
+      style={{
+        height: 150,
+        width: 200,
+        ...containerStyle,
+      }}
+      onPress={onPress}
+    >
+      {/* Image Background */}
+      <SharedElement
+        style={[StyleSheet.absoluteFillObject]}
+        id={`${sharedElementPrefix}-CategoryCard-Bg-${category?.id}`}
       >
-        <Text
+        <Image
+          source={category?.thumbnail}
           style={{
-            ...FONTS.h3,
-            color: COLORS.white,
-            width: "70%",
+            width: "100%",
+            height: "100%",
+            borderRadius: SIZES.radius,
           }}
+          resizeMode="cover"
+        />
+      </SharedElement>
+
+      {/* Title */}
+      <View
+        style={{
+          position: "absolute",
+          bottom: 35,
+          left: 10,
+        }}
+      >
+        <SharedElement
+          style={[StyleSheet.absoluteFillObject]}
+          id={`${sharedElementPrefix}-CategoryCard-Title-${category?.id}`}
         >
-          {category.title}
-        </Text>
-      </ImageBackground>
+          <Text
+            style={{
+              position: "absolute",
+              ...FONTS.h3,
+              color: COLORS.white,
+              // bottom: 20,
+              // width: "70%",
+            }}
+          >
+            {category?.title}
+          </Text>
+        </SharedElement>
+      </View>
     </TouchableOpacity>
   );
 };

@@ -4,7 +4,7 @@ import IconLabel from "./IconLabel";
 
 import { COLORS, FONTS, SIZES, icons } from "../../constants";
 
-const HorizontalCourseCard = ({ containerStyle, course }) => {
+const HorizontalCourseCard = ({ appTheme, containerStyle, course }) => {
   return (
     <View>
       <TouchableOpacity
@@ -51,9 +51,17 @@ const HorizontalCourseCard = ({ containerStyle, course }) => {
         </ImageBackground>
 
         {/* Course Details */}
-        <View style={{ flexShrink: 1, marginLeft: SIZES.base, justifyContent: "space-evenly" }}>
+        <View
+          style={{
+            flexShrink: 1,
+            marginLeft: SIZES.base,
+            justifyContent: "space-evenly",
+          }}
+        >
           {/* title */}
-          <Text style={{ ...FONTS.h4 }}>{course.title}</Text>
+          <Text style={{ ...FONTS.h4, color: appTheme?.textColor }}>
+            {course.title}
+          </Text>
 
           {/* info */}
           <View
@@ -64,16 +72,16 @@ const HorizontalCourseCard = ({ containerStyle, course }) => {
             }}
           >
             <Text
-              style={{ ...FONTS.body5, color: COLORS.gray60, marginTop: 5 }}
+              style={{ ...FONTS.body5, color: appTheme?.textColor7, marginTop: 5 }}
             >
               By {course.instructor}
             </Text>
 
             <IconLabel
               icon={icons.time}
-              iconStyle={{ height: 12, width: 12, tintColor: COLORS.gray60 }}
+              iconStyle={{ height: 12, width: 12, tintColor: appTheme?.textColor7 }}
               label={course.duration}
-              labelStyle={{ ...FONTS.body5, color: COLORS.gray60 }}
+              labelStyle={{ ...FONTS.body5, color: appTheme?.textColor7 }}
             />
           </View>
 
@@ -93,7 +101,7 @@ const HorizontalCourseCard = ({ containerStyle, course }) => {
               icon={icons.star}
               iconStyle={{ height: 15, width: 15 }}
               label={course.ratings}
-              labelStyle={{ ...FONTS.h3, color: COLORS.black }}
+              labelStyle={{ ...FONTS.h3, color: appTheme?.textColor }}
               containerStyle={{
                 marginLeft: 15,
               }}

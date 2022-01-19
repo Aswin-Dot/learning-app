@@ -5,6 +5,7 @@ import CategoriesCard from "./CategoriesCard";
 import IconLabel from "./IconLabel";
 import Search from "./Search";
 import RadioButton from "./RadioButton";
+import BottomSheetModal from "./BottomSheetModal";
 
 export {
   Search,
@@ -14,4 +15,5 @@ export {
   CategoriesCard,
   HorizontalCourseCard,
   RadioButton,
+  BottomSheetModal,
 };
