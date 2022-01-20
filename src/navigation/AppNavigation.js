@@ -5,9 +5,7 @@ import {
 } from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 
-import {
-  CourseListing
-} from "../screens";
+import { CourseListing, CourseDetails } from "../screens";
 import MainLayout from "../screens/MainLayout";
 
 const Stack = createSharedElementStackNavigator();
@@ -38,7 +36,7 @@ const AppNavigation = () => {
       screenOptions={{
         headerShown: false,
         useNativeDriver: true,
-        // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
       detachInactiveScreens={false}
       initialRouteName={"Dashboard"}
@@ -49,6 +47,7 @@ const AppNavigation = () => {
         component={CourseListing}
         options={() => options}
       />
+      <Stack.Screen name="CourseDetails" component={CourseDetails} />
     </Stack.Navigator>
   );
 };

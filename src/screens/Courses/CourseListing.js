@@ -16,7 +16,7 @@ import { Divider } from "react-native-elements";
 import { SharedElement } from "react-navigation-shared-element";
 
 import { HorizontalCourseCard, BottomSheetModal } from "../../components";
-import CourseBottomSheet from "./Components/CourseBottomSheet";
+import {CourseBottomSheet} from "./Components";
 import {
   COLORS,
   SIZES,
@@ -324,6 +324,9 @@ const CourseListing = ({ navigation, route, appTheme }) => {
             containerStyle={{
               marginBottom: SIZES.radius,
             }}
+            onPress={() =>
+              navigation.navigate("CourseDetails", { selectedCourse: item })
+            }
           />
         )}
         ItemSeparatorComponent={() => (
@@ -335,24 +338,30 @@ const CourseListing = ({ navigation, route, appTheme }) => {
       {renderHeader()}
 
       {/* Bottom Sheet */}
-      <BottomSheetModal isVisible={isVisible} Close={() => setIsVisible(false)} title="Filter">
-          <CourseBottomSheet/>
+      <BottomSheetModal
+        isVisible={isVisible}
+        Close={() => setIsVisible(false)}
+        title="Filter"
+      >
+        <CourseBottomSheet />
       </BottomSheetModal>
     </View>
   );
 };
 
 CourseListing.sharedElements = (route, otherRoute, showing) => {
-  const { category, sharedElementPrefix } = route.params;
+  if (otherRoute.name == "Dashboard") {
+    const { category, sharedElementPrefix } = route.params;
 
-  return [
-    {
-      id: `${sharedElementPrefix}-CategoryCard-Bg-${category?.id}`,
-    },
-    {
-      id: `${sharedElementPrefix}-CategoryCard-Title-${category?.id}`,
-    }
-  ]
+    return [
+      {
+        id: `${sharedElementPrefix}-CategoryCard-Bg-${category?.id}`,
+      },
+      {
+        id: `${sharedElementPrefix}-CategoryCard-Title-${category?.id}`,
+      },
+    ];
+  }
 };
 
 const mapStateToProps = (state) => {

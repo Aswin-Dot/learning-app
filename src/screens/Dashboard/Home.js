@@ -212,7 +212,10 @@ const Home = ({ appTheme }) => {
               <CategoriesCard
                 category={item}
                 onPress={() =>
-                  navigation.navigate("CourseListing", { category: item, sharedElementPrefix: "Home" })
+                  navigation.navigate("CourseListing", {
+                    category: item,
+                    sharedElementPrefix: "Home",
+                  })
                 }
                 sharedElementPrefix="Home"
                 containerStyle={{
@@ -247,6 +250,9 @@ const Home = ({ appTheme }) => {
                 containerStyle={{
                   marginBottom: SIZES.radius,
                 }}
+                onPress={() =>
+                  navigation.navigate("CourseDetails", { selectedCourse: item })
+                }
               />
             )}
             ItemSeparatorComponent={() => (

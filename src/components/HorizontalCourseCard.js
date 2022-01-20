@@ -4,7 +4,7 @@ import IconLabel from "./IconLabel";
 
 import { COLORS, FONTS, SIZES, icons } from "../../constants";
 
-const HorizontalCourseCard = ({ appTheme, containerStyle, course }) => {
+const HorizontalCourseCard = ({ appTheme, containerStyle, course, onPress }) => {
   return (
     <View>
       <TouchableOpacity
@@ -13,7 +13,7 @@ const HorizontalCourseCard = ({ appTheme, containerStyle, course }) => {
           marginVertical: SIZES.radius,
           ...containerStyle,
         }}
-        onPress={() => console.log("hi")}
+        onPress={onPress}
       >
         {/* Thumbnail */}
         <ImageBackground
