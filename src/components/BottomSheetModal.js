@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { BottomSheet } from "react-native-elements";
 import { Entypo } from "@expo/vector-icons";
 
-import TextButton from "./TextButton";
 import {
   COLORS,
   FONTS,
@@ -40,7 +39,6 @@ const BottomSheetModal = ({ children, isVisible, Close, title }) => {
             backgroundColor: COLORS.white,
             borderTopLeftRadius: 25,
             borderTopRightRadius: 25,
-            paddingHorizontal: SIZES.padding,
             paddingVertical: SIZES.radius,
           }}
         >
