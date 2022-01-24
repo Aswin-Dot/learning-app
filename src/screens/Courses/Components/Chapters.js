@@ -4,13 +4,9 @@ import {
   Text,
   ScrollView,
   Image,
-  ImageBackground,
   TouchableOpacity,
-  Keyboard,
-  Animated,
 } from "react-native";
-import { Divider } from "react-native-elements";
-import { FlatList } from "react-native-gesture-handler";
+import { Divider, ListItem, LinearProgress } from "react-native-elements";
 import { connect } from "react-redux";
 
 import {
@@ -118,6 +114,94 @@ const Chapters = ({ route, navigation, appTheme }) => {
 
       <Divider style={{ marginVertical: SIZES.radius }} />
 
+      {/* Videos */}
+      <View>
+        {dummyData?.course_details?.videos.map((item, index) => (
+          <View key={`VideosList-${index}`}>
+            <TouchableOpacity onPress={() => console.log(item.title)}>
+              <ListItem
+                containerStyle={{
+                  paddingHorizontal: SIZES.padding,
+                  backgroundColor: item?.is_playing
+                    ? COLORS.additionalColor11
+                    : null,
+                }}
+              >
+                {/* Image */}
+                <Image
+                  source={
+                    item?.is_complete
+                      ? icons.completed
+                      : item?.is_playing
+                      ? icons.play_1
+                      : icons.lock
+                  }
+                  style={{
+                    height: 40,
+                    width: 40,
+                    // tintColor: COLORS.primary,
+                    opacity: 1,
+                  }}
+                  resizeMode="contain"
+                />
+
+                {/* Content */}
+                <ListItem.Content>
+                  <ListItem.Title
+                    style={{ ...FONTS.h3, color: appTheme?.textColor }}
+                  >
+                    {item.title}
+                  </ListItem.Title>
+                  <ListItem.Subtitle
+                    style={{ ...FONTS.body4, color: COLORS.gray40 }}
+                  >
+                    {item.duration}
+                  </ListItem.Subtitle>
+                </ListItem.Content>
+
+                {/* Size */}
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text style={{ ...FONTS.body4, color: COLORS.gray40 }}>
+                    {item.size}
+                  </Text>
+                  <Image
+                    source={
+                      item.is_downloaded ? icons.completed : icons.download
+                    }
+                    style={{
+                      width: 20,
+                      height: 20,
+                      marginLeft: 5,
+                      tintColor: item.is_downloaded
+                        ? COLORS.primary
+                        : item.is_lock
+                        ? COLORS.gray40
+                        : COLORS.black,
+                    }}
+                    resizeMode="contain"
+                  />
+                </View>
+              </ListItem>
+            </TouchableOpacity>
+
+            {item?.is_playing && (
+              <LinearProgress
+                color={COLORS.primary}
+                trackColor={COLORS.additionalColor11}
+                value={
+                  item?.progress.substring(0, item?.progress.length - 1) / 100
+                }
+                variant="determinate"
+                style={{
+                  marginTop: -4,
+                  height: 4,
+                }}
+              />
+            )}
+          </View>
+        ))}
+      </View>
+
       {/* Popular Courses */}
       <View
         style={{
@@ -150,31 +234,31 @@ const Chapters = ({ route, navigation, appTheme }) => {
         </View>
 
         {/* Courses */}
-        <FlatList
-          data={dummyData.courses_list_2}
-          listKey="PopularCourses2"
-          keyExtractor={(item) => `PopularCourses2-${item.id}`}
-          scrollEnabled={false}
-          contentContainerStyle={{
+        <View
+          style={{
             marginTop: SIZES.base,
             paddingHorizontal: SIZES.padding,
           }}
-          renderItem={({ item, index }) => (
-            <HorizontalCourseCard
-              appTheme={appTheme}
-              course={item}
-              containerStyle={{
-                marginBottom: SIZES.radius,
-              }}
-              onPress={() =>
-                navigation.navigate("CourseDetails", { selectedCourse: item })
-              }
-            />
-          )}
-          ItemSeparatorComponent={() => (
-            <Divider style={{ marginVertical: SIZES.base }} />
-          )}
-        />
+        >
+          {dummyData.courses_list_2.map((item, index) => (
+            <View key={`PopularCourses2-${item.id}`}>
+              <HorizontalCourseCard
+                appTheme={appTheme}
+                course={item}
+                containerStyle={{
+                  marginBottom: SIZES.radius,
+                }}
+                onPress={() =>
+                  navigation.navigate("CourseDetails", { selectedCourse: item })
+                }
+              />
+
+              {index < dummyData.courses_list_2.length - 1 ? (
+                <Divider style={{ marginVertical: SIZES.base }} />
+              ) : null}
+            </View>
+          ))}
+        </View>
       </View>
     </ScrollView>
   );

@@ -172,6 +172,7 @@ const Home = ({ appTheme }) => {
         {/* -------------- Courses --------------- */}
         <FlatList
           horizontal
+          overScrollMode="never"
           data={dummyData.courses_list_1}
           listKey="Courses"
           keyExtractor={(item) => `Courses-${item.id}`}
@@ -201,6 +202,7 @@ const Home = ({ appTheme }) => {
         <Section title="Categories">
           <FlatList
             horizontal
+            overScrollMode="never"
             data={dummyData.categories}
             listKey="Categories"
             keyExtractor={(item) => `Categories-${item.id}`}
